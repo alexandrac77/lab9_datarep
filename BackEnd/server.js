@@ -4,6 +4,8 @@ const port = 4000
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+global.TextEncoder = require("util").TextEncoder; global.TextDecoder = require("util").TextDecoder;
+
 app.use(cors());
 app.use(function(req, res, next) {
 res.header("Access-Control-Allow-Origin", "*");
@@ -55,6 +57,21 @@ app.post('/api/movies', (req,res)=>{
     });
     res.send('Data Sent to Server!')
 })
+
+
+
+//listen for request to delete
+app.delete('/api/movies/:id', (req,res)=>{
+    //log message
+    console.log('deleting: ' +req.params.id);
+    //delete records from database based on id
+    movieModel.deleteOne({_id:req.params.id},
+        (err,data)=>{
+            res.send(data); //return data once deletion is complete
+        })
+})
+
+
 
 app.get('/api/movies/:id',(req, res)=>{
     console.log(req.params.id);
